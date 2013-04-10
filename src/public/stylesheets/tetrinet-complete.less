@@ -1,0 +1,376 @@
+
+.buttonBackground(@startColor, @endColor, @textColor: #fff, @textShadow: 0 -1px 0 rgba(0,0,0,.25)) {
+	background-color: @endColor; /* Darken IE7 buttons by default so they stand out more given they won't have borders */
+
+
+	// in these cases the gradient won't cover the background, so we override
+	&:hover, &:active, &.active, &.disabled, &[disabled] {
+		color: @textColor;
+		background-color: darken(@endColor, 5%);
+	}
+
+	// IE 7 + 8 can't handle box-shadow to show active, so we darken a bit ourselves
+	&:active,
+	&.active {
+		background-color: darken(@endColor, 10%) e("\9");
+	}
+}
+
+@import "bootstrap/less/bootstrap.less"; // include main bootstrap
+@import "bootstrap/less/responsive.less"; // Modify this for custom colors, font-sizes, etc
+
+
+
+
+
+@cellSize: 15px;
+
+@textColor: lighten(@gameColor, 5%);
+
+@bodyBackground:      darken(@gameColor, 20%);
+
+// Links
+// -------------------------
+@linkColor:             lighten(@gameColor,55%);
+@linkColorHover:        lighten(@linkColor, 15%);
+
+
+/************* font ****************/
+@font-face {
+	font-family: 'Roboto Condensed';
+	font-style: normal;
+	font-weight: 400;
+	src: local('Roboto Condensed Regular'), local('RobotoCondensed-Regular'), url(roboto.woff) format('woff');
+}
+
+
+// Navbar
+// -------------------------
+@navbarCollapseWidth:             979px;
+@navbarCollapseDesktopWidth:      @navbarCollapseWidth + 1;
+
+@navbarHeight:                    40px;
+@navbarBackgroundHighlight:   	  @gameColor;
+@navbarBackground:                darken(@navbarBackgroundHighlight, 5%);
+@navbarBorder:                    darken(@gameColor, 12%);
+
+@navbarText:                      #EEE;
+@navbarLinkColor:                 white;
+@navbarLinkColorHover:            lighten(@navbarLinkColor, 15%);
+@navbarLinkColorActive:           lighten(@navbarLinkColor, 15%);
+@navbarLinkBackgroundHover:       rgba(255,255,255,0.2);
+@navbarLinkBackgroundActive:      @gameColorSec;
+
+@navbarBrandColor:                @navbarLinkColor;
+
+.nav > li > a:hover {
+	text-decoration: none;
+	background-color: lighten(@bodyBackground,10%);
+}
+
+// Tables
+// -------------------------
+@tableBackground:                   transparent; // overall background-color
+@tableBackgroundAccent:             fadeout(@gameColor,50%); // for striping
+@tableBackgroundHover:              fadeout(@gameColor,20%); // for hover
+@tableBorder:                       @gameColor; // table and cell border
+
+// Hero unit
+// -------------------------
+@heroUnitBackground:              @gameColorSec;
+@heroUnitHeadingColor:            lighten(@gameColorSec,70%);
+@heroUnitLeadColor:               @gameColorSec;
+
+.hero-unit p {
+	color: lighten(@gameColorSec,50%);
+}
+
+.hero-unit a {
+	color: lighten(@gameColorSec,60%);
+}
+
+
+input[type="text"], textarea, .editable {
+	background-color: @bodyBackground;
+	border: 1px solid @gameColor;
+	color: lighten(@gameColor, 30%);
+	border-radius: 0px;
+	-webkit-border-radius: 0px;
+	-moz-border-radius: 0px;
+	font-family: 'Roboto Condensed', sans-serif;
+}
+
+.nickname {
+	border: 1px solid @textColor;
+	background-color: lighten(@bodyBackground, 10%);
+	padding: 0em;
+	padding-left: 0.4em;
+	padding-right: 0.2em;
+}
+
+.editable {
+	padding: 0.2em;	
+}
+
+.clickable {
+	cursor: pointer;
+}
+
+
+//@btnPrimaryBackgroundHighlight:     spin(@btnPrimaryBackground, 20%);
+
+@btnPrimaryBackgroundHighlight:     lighten(@btnPrimaryBackground, 10%);
+
+
+#sidemenu li.active a {
+	background-color: @gameColorSec !important;
+	color: white;
+}
+
+@paginationBorder:                   lighten(@gameColor,25%); 
+@paginationActiveBackground:         lighten(@gameColor,40%); 
+
+
+
+body {
+	-webkit-transform:perspective(600);
+}
+
+
+
+body, button.btn {
+	font-family: 'Roboto Condensed', sans-serif;
+}
+
+
+
+
+h1 {
+	color: lighten(@gameColor, 50%);	
+}
+
+a {
+	color: @linkColor;
+}
+
+
+p, div {
+	color: lighten(@gameColor, 30%);	
+}
+
+
+
+
+
+
+@borderColor: fadeout(@gameColor, 80%);
+
+
+.game-zone {
+	background-color: @gameColor;
+	border: 1px solid @borderColor;
+}
+
+.game-mini-cell {
+	height: 3px;
+	width: 3px;
+	border-top: 1px solid @borderColor;
+	border-left: 1px solid @borderColor;
+}
+
+
+.game-cell {
+	height: @cellSize;
+	width: @cellSize;
+	border-top: 1px solid @borderColor;
+	border-left: 1px solid @borderColor;
+}
+
+
+.right-panel {
+	width: 50%;
+	float: right;
+}
+
+.shaded {
+	opacity: 0.5;
+}
+
+.gray {
+	filter: gray;
+	-webkit-filter: grayscale(100%);
+	-moz-filter: grayscale(100%);
+}
+
+.first-div {
+	margin-top: 70px;
+	padding-top: 10px;
+}
+.btn {
+	.border-radius(0);
+	.box-shadow(~"inset 0 0px 0 rgba(255,255,255,.2), 0 0px 0px rgba(0,0,0,.05)");
+	border: 1px solid @gameColor;
+	border-color: #c5c5c5;
+	border-color: rgba(0,0,0,.15) rgba(0,0,0,.15) rgba(0,0,0,.25);
+	color: #FFF;
+	background-color: @gameColor;
+}
+
+.btn:hover {
+	color: #FFF;
+	background-color: lighten(@gameColor,10%);
+}
+
+.btn-primary {
+	background-color: @btnPrimaryBackground;
+	color: #FFF;
+}
+// Warning appears are orange
+.btn-warning {
+	background-color: @btnWarningBackground;
+	color: #FFF;
+}
+// Danger and error appear as red
+.btn-danger {
+	background-color: @btnDangerBackground;
+	color: #FFF;
+}
+// Success appears as green
+.btn-success {
+	background-color: @btnSuccessBackground;
+	color: #FFF;
+}
+// Info appears as a neutral blue
+.btn-info {
+	background-color: @btnInfoBackground;
+	color: #FFF;
+}
+// Inverse appears as dark gray
+.btn-inverse {
+	background-color: @btnInverseBackground;
+	color: #FFF;
+}
+
+
+
+/*tetris.BlockType = {
+	EMPTY: 0,
+	GREY: 1,
+	CYAN: 2,
+	GREEN: 3,
+	RED: 4,
+	BLUE: 5,
+	GHOST: 999
+}*/
+
+/*empty*/
+.block0 {
+	background-color: @bodyBackground;
+}
+
+
+/* grey */
+.block1 {
+	background-color: mix(@bodyBackground, @gameColor, 50%);
+}
+
+
+@cyanBlock: mix(@bodyBackground, #0FF, 70%);
+@purpleBlock: mix(@bodyBackground, #F0F, 70%);
+@yellowBlock: mix(@bodyBackground, #FF0, 70%);
+@greenBlock: mix(@bodyBackground, #0F0, 70%);
+@redBlock: mix(@bodyBackground, #F00, 70%);
+@blueBlock: mix(@bodyBackground, #00F, 70%);
+
+/*EMPTY: 0,
+	GREY: 1,
+	CYAN: 2,
+	GREEN: 3,
+	RED: 4,
+	BLUE: 5,
+	PURPLE: 6,
+	YELLOW: 7,*/
+
+/* cyan */
+.block2 {
+	background-color: @cyanBlock;
+	box-shadow: inset 0px 0px 1px 1px fadeout(lighten(@cyanBlock, 10%), 30%);
+}
+
+
+/* green */
+.block3 {
+	background-color: @greenBlock;
+	box-shadow: inset 0px 0px 1px 1px fadeout(lighten(@greenBlock, 10%), 30%);
+}
+
+/* red */
+.block4{
+	background-color: mix(@bodyBackground, red, 70%);
+	box-shadow: inset 0px 0px 1px 1px fadeout(lighten(@redBlock, 20%), 30%);
+}
+
+/* blue */
+.block5{
+	background-color: mix(@bodyBackground, blue, 70%);
+	box-shadow: inset 0px 0px 1px 1px fadeout(lighten(@blueBlock, 30%), 30%);
+}
+
+/* purple */
+.block6{
+	background-color: mix(@bodyBackground, @purpleBlock, 10%);
+	box-shadow: inset 0px 0px 1px 1px fadeout(lighten(@purpleBlock, 30%), 30%);
+}
+
+/* yellow */
+.block7{
+	background-color: mix(@bodyBackground, @yellowBlock, 10%);
+	box-shadow: inset 0px 0px 1px 1px fadeout(lighten(@yellowBlock, 30%), 30%);
+}
+
+@secretL: mix(@bodyBackground, #FA6900, 70%);
+.block8{
+	background-color: mix(@bodyBackground, @secretL, 10%);
+	box-shadow: inset 0px 0px 1px 1px fadeout(lighten(@secretL, 50%), 30%);
+}
+
+
+@secretL2: mix(@bodyBackground, #8DC19B, 70%);
+.block9{
+	background-color: mix(@bodyBackground, @secretL2, 10%);
+	box-shadow: inset 0px 0px 1px 1px fadeout(lighten(@secretL2, 30%), 30%);
+}
+
+
+
+
+.block999 {
+	background-color: mix(@bodyBackground, white, 95%);
+	box-shadow: inset 0px 0px 1px 1px rgba(255,255,255,0.1);
+}
+
+#chat, #game {
+	transition: all 0.3s;
+	-webkit-transition: all 0.3s;
+	-o-transition: all 0.3s;
+	-moz-transition: all 0.3s;
+
+	-webkit-transform-style: preserve-3d;
+	transform-style: preserve-3d;
+}
+
+body {
+	-webkit-perspective: 600;
+}
+
+#chat.shaded {
+	transform: rotateY(-15deg) translateZ(-100px);
+	-webkit-transform: rotateY(-15deg) translateZ(-100px);
+	-moz-transform: rotateY(-15deg) translateZ(-100px);
+}
+
+#game.shaded {
+	transform: rotateY(15deg) translateZ(-100px);
+	-webkit-transform: rotateY(15deg) translateZ(-100px);
+	-moz-transform: rotateY(15deg) translateZ(-100px);
+}

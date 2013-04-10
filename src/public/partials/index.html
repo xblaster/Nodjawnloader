@@ -1,0 +1,33 @@
+<div class="row hero-unit"  >
+	<div class="span8">
+		<h1>JsDownloader</h1>
+		<hr/>
+		
+	</div>
+</div>
+<div class="row" ng-show="connected === false">
+	<div class="span6">
+		<h1><i class="icon-spinner icon-spin icon-x4"></i> Connecting...	</h1>
+	</div>
+</div>
+<div class="row" ng-show="connected === true">
+	<div class="span6">
+		<h1> Connected !	</h1>
+	</div>
+
+	<div>
+ 		<h4>File status</h4>
+ 		<a ng-disabled="dlInProgress" href="{{file.fileEntry.toURL()}}">{{file.fileEntry.toURL()}}</a>
+ 		{{dlInProgress}}
+
+
+ 		<form ng-submit="askDownload(url)">
+ 			<input type="text" ng-model="url">
+ 			<button class="btn" type="submit">Download</button>
+ 		</form>
+	</div>
+
+	<div ng-repeat="error in errors">
+ 		{{error}}
+	</div>
+</div>
