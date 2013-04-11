@@ -14,7 +14,7 @@ var express = require('express')
 var app = express();
 var _ = require('lodash');
 
-require('./public/js/lib/bison')
+var BISON = require('./public/js/lib/bison');
 
 
 app.configure(function(){
@@ -69,20 +69,11 @@ server.listen(app.get('port'), function(){
 
 
 function getUintFromBuffer(buffer) {
-  // Encode packet with BiSON to safe up to 50% against JSON.stringify
-  var bisonPacket = BISON.encode(buffer.toString("binary"));
+  //console.log(buffer);
+  var uint8Packet = new Uint8Array(buffer.length);
 
-  // A tricky part is that you will get nothing sending data as-is.
-  // Our bison string is build of chars with indexes from 0 to 255.
-  // utf-8 uses extra byte to encode char beyond index 127 so u will end up
-  // sending value which can be represented by one byte in two bytes.
-  // To take advantage of binary transport we will have to convert our data
-  // to javascript typed array. Unsigned Int 8 will do best.
-
-  var uint8Packet = new Uint8Array(packet.length);
-
-  for(var i = 0, len = bisonPacket.length; i < len; i++) {
-    uint8Packet[i] = packet.charCodeAt(i);
+  for(var i = 0, len = buffer.length; i < len; i++) {
+    uint8Packet[i] = buffer.readInt8(i);
   }
 
   return uint8Packet;
@@ -111,14 +102,16 @@ io.of('/download')
 
         var req = http.request(url, function(res) {
           //res.setEncoding('ascii');
-          res.setEncoding('binary');
+          //res.setEncoding('binary');
+          //res.setEncoding('UTF-8');
           res.on('data', function(chunk) {
             //console.log(chunk);
 
             socket.emit('data', {
               'offset': offset, 
               //'data': chunk.toString('base64')
-              'data': getUintFromBuffer(chunk);
+              'data': getUintFromBuffer(chunk)
+              //'data': unescape(encodeURIComponent(JSON.stringify(chunk.toString())))
             });
             offset+= chunk.length;
           });

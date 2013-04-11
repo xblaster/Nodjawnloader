@@ -3,89 +3,34 @@
 window.requestFileSystem = window.requestFileSystem ||  window.webkitRequestFileSystem;
 window.BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder;
 
+function decodeUint8(data) {
+var reader = new FileReader();
 
- var keyStr = "ABCDEFGHIJKLMNOP" +
-               "QRSTUVWXYZabcdef" +
-               "ghijklmnopqrstuv" +
-               "wxyz0123456789+/" +
-               "=";
+  // There is also readAsBinaryString method if you are not using typed arrays
+  reader.readAsArrayBuffer(data);
 
-  function encode64(input) {
-     input = escape(input);
-     var output = "";
-     var chr1, chr2, chr3 = "";
-     var enc1, enc2, enc3, enc4 = "";
-     var i = 0;
+  // As the stream finish to load we can use the results
+  reader.onloadend = function() {
 
-     do {
-        chr1 = input.charCodeAt(i++);
-        chr2 = input.charCodeAt(i++);
-        chr3 = input.charCodeAt(i++);
+    // Another tricky part. Before you can read the results you have to create
+    // a view for our typed array
+    var view = new Uint8Array(this.result);
 
-        enc1 = chr1 >> 2;
-        enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
-        enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
-        enc4 = chr3 & 63;
+    // Now let's decode array containing char indexes to normal ol' utf8 string
+    var str = "";
+    for(var i = 0; i < view.length; i++) {
+      str += String.fromCharCode(view[i]);
+    }
 
-        if (isNaN(chr2)) {
-           enc3 = enc4 = 64;
-        } else if (isNaN(chr3)) {
-           enc4 = 64;
-        }
+    // Our string is still BISON encoded, so last conversion needs to be done.
+    var message = BISON.decode(str);                   
 
-        output = output +
-           keyStr.charAt(enc1) +
-           keyStr.charAt(enc2) +
-           keyStr.charAt(enc3) +
-           keyStr.charAt(enc4);
-        chr1 = chr2 = chr3 = "";
-        enc1 = enc2 = enc3 = enc4 = "";
-     } while (i < input.length);
+    // Voilà, here comes object that we sent
+    console.log(message);
 
-     return output;
-  }
-
-  function decode64(input) {
-     var output = "";
-     var chr1, chr2, chr3 = "";
-     var enc1, enc2, enc3, enc4 = "";
-     var i = 0;
-
-     // remove all characters that are not A-Z, a-z, 0-9, +, /, or =
-     var base64test = /[^A-Za-z0-9\+\/\=]/g;
-     if (base64test.exec(input)) {
-        alert("There were invalid base64 characters in the input text.\n" +
-              "Valid base64 characters are A-Z, a-z, 0-9, '+', '/',and '='\n" +
-              "Expect errors in decoding.");
-     }
-     input = input.replace(/[^A-Za-z0-9\+\/\=]/g, "");
-
-     do {
-        enc1 = keyStr.indexOf(input.charAt(i++));
-        enc2 = keyStr.indexOf(input.charAt(i++));
-        enc3 = keyStr.indexOf(input.charAt(i++));
-        enc4 = keyStr.indexOf(input.charAt(i++));
-
-        chr1 = (enc1 << 2) | (enc2 >> 4);
-        chr2 = ((enc2 & 15) << 4) | (enc3 >> 2);
-        chr3 = ((enc3 & 3) << 6) | enc4;
-
-        output = output + String.fromCharCode(chr1);
-
-        if (enc3 != 64) {
-           output = output + String.fromCharCode(chr2);
-        }
-        if (enc4 != 64) {
-           output = output + String.fromCharCode(chr3);
-        }
-
-        chr1 = chr2 = chr3 = "";
-        enc1 = enc2 = enc3 = enc4 = "";
-
-     } while (i < input.length);
-
-     return unescape(output);
-  }
+    return message;
+  };
+}
 
 var IndexCtrl = function($scope, $location, $rootScope, $cookies, $timeout) {
 
@@ -155,22 +100,24 @@ var IndexCtrl = function($scope, $location, $rootScope, $cookies, $timeout) {
 	}
 
 	$scope.packets = [];
-	$scope.blob = "";
+	$scope.blob = [];
 
 	$scope.fileUploaded = false;
 
 	$scope.constructLoop = function() {
-		console.log("constructLoop");
-		console.log($scope.packets);
-		console.log($scope.fileUploaded);
+		//console.log("constructLoop");
+		//console.log($scope.packets);
+		//console.log($scope.fileUploaded);
 		while($scope.packets.length>0) {
 			console.log("handle packet");
 			var obj = $scope.packets[0];
 			$scope.packets.splice(0,1);
 			var chunk = obj.data;
 			//var decoded = window.atob(chunk);
-			var decoded = decode64(chunk);
-			$scope.blob = $scope.blob+decoded;
+			//var decoded = decode64(chunk);
+			//var decoded = JSON.parse(decodeURIComponent(escape(chunk)));
+			var decoded = new Uint8Array(chunk);
+			$scope.blob.push(decoded);
 				/*
 				
 
@@ -196,7 +143,8 @@ var IndexCtrl = function($scope, $location, $rootScope, $cookies, $timeout) {
 			//fileWriter.write($scope.blob.getBlob('text/plain'));
 			console.log("write eveything");
 			console.log($scope.blob);
-			fileWriter.write(new Blob([$scope.blob],{type: "application/octet-binary"}));
+			fileWriter.write(new Blob($scope.blob,{type: "application/octet-binary"}));
+			//fileWriter.write(new Blob([$scope.blob],{type: "text/plain"}));
 		});	
 
 				return;
