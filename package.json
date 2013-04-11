@@ -11,7 +11,8 @@
     "less-middleware": "*",
     "socket.io": "*",
     "express-uglify": "*",
-    "lodash": "~1.1.1"
+    "lodash": "~1.1.1",
+    "btoa": "~1.1.0"
   },
   "devDependencies": {
     "grunt": "~0.4.1",

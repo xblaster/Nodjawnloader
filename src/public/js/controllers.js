@@ -3,6 +3,16 @@
 window.requestFileSystem = window.requestFileSystem ||  window.webkitRequestFileSystem;
 window.BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder;
 
+
+function base64encode(u8) {
+  return btoa(String.fromCharCode.apply(null, u8));
+}
+
+function base64decode(b64encoded) {
+  var u8_2 = new Uint8Array(atob(b64encoded).split("").map(function(c) {
+    return c.charCodeAt(0); }));
+  return u8_2;
+}
 // LZW-compress a string
 function lzw_encode(s) {
     var dict = {};
@@ -188,7 +198,7 @@ var IndexCtrl = function($scope, $location, $rootScope, $cookies, $timeout) {
 			//var decoded = window.atob(chunk);
 			//var decoded = decode64(chunk);
 			//var decoded = JSON.parse(decodeURIComponent(escape(chunk)));
-			var decoded = new Uint8Array(BISON.decode(lzw_decode(chunk)));
+			var decoded = new Uint8Array(base64decode(BISON.decode(chunk)));
 			$scope.blob.push(decoded);
 				/*
 				
