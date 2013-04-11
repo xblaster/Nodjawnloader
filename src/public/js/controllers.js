@@ -104,8 +104,8 @@ var IndexCtrl = function($scope, $location, $rootScope, $cookies, $timeout) {
 	}
 
 	$scope.init = function() {
-		window.webkitStorageInfo.requestQuota(TEMPORARY, 1024*1024*1000, function(grantedBytes) {
-			window.requestFileSystem(TEMPORARY, grantedBytes, $scope.onInitFs, $scope.errorHandler);
+		window.webkitStorageInfo.requestQuota(PERSISTENT, 1024*1024*1000, function(grantedBytes) {
+			window.requestFileSystem(PERSISTENT, grantedBytes, $scope.onInitFs, $scope.errorHandler);
 		}, function(e) {
 			$scope.$apply(function() {
 				$scope.error = e;

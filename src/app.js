@@ -103,6 +103,11 @@ io.of('/download')
 
         var parsedUrl = url.parse(link);
 
+        if (url.indexOf("https")>-1) {
+          socket.emit('error', "https not supported");
+          return;
+        }
+
         var req = http.request(parsedUrl, function(res) {
           //res.setEncoding('ascii');
           //res.setEncoding('binary');
