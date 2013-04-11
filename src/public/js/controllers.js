@@ -3,6 +3,11 @@
 window.requestFileSystem = window.requestFileSystem ||  window.webkitRequestFileSystem;
 window.BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder;
 
+function rename(cwd, src, newName) {
+  cwd.getFile(src, {}, function(fileEntry) {
+    fileEntry.moveTo(cwd, newName);
+  }, function() {});
+}
 
 function base64encode(u8) {
   return btoa(String.fromCharCode.apply(null, u8));
@@ -248,12 +253,32 @@ var IndexCtrl = function($scope, $location, $rootScope, $cookies, $timeout) {
 		});
 	});
 
-	socket.on('end', function(chunk, eventType) {
-		$scope.status = 'downloaded'
+	socket.on('end', function(obj, eventType) {
+		console.log('end');
+		$scope.status = 'downloaded';
+		
+		var splited = obj.name.split("/");
+		var fileName = splited[splited.length-1];
+
+		var fileExtension = fileName.split(".")[1];
+		if (fileExtension== "exe") {
+			fileName = fileName+".forJsSecurity"
+		}
+
+		rename(fs.root, 'tmpFile', fileName);
+
+		//change file link
+		fs.root.getFile(fileName, {create: true}, function (fileEntry) {
+			console.log("change to filename "+fileName);
+			$scope.file.fileEntry = fileEntry;
+			$scope.$apply();
+		});
+
+
 		
 
 
-		$scope.$apply();
+		
 	});
 
 	socket.on('data', function(obj, eventType) {
