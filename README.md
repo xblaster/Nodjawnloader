@@ -1,7 +1,18 @@
-NodeTetrinet
+JsDownloader
 ============
 
-NodeTetrinet is an open source implementation of a Tetrinet clone with node.js, angular.js and socket.io.
+A download app using node.js and socket.io and expose file using HTML5 FileAPI 
+
+# Why JsDownloader ? 
+
+Some firewall block zip, war, jar or nearly eveything but GET http request. JsDownloader server will download 
+your request and send file blocks using websocket or long polling using socket.io. 
+When all blocks are downloaded, the file 
+is exposed to you using HTML5 File API.
+
+# Requirement
+
+WARNING :  Only tested with Chrome 26
 
 # Launch your own server
 
@@ -11,10 +22,6 @@ Checkout the project and type in a command line
 >node app.js
 
 # TODO LIST
-
-* add "special power" like in the original tetrinet to make the game more "fun"
-* clean the code. Some part are quite weird
-* do not set vars directly on socket
 
 # License
 Copyright (c) 2013 Jérôme WAX
