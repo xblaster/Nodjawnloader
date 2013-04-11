@@ -118,7 +118,7 @@ io.of('/download')
             socket.emit('data', {
               'offset': offset, 
               //'data': chunk.toString('base64')
-              'data': getUintFromBuffer(chunk)
+              'data': BISON.encode(getUintFromBuffer(chunk))
               //'data': unescape(encodeURIComponent(JSON.stringify(chunk.toString())))
             });
             offset+= chunk.length;

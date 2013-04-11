@@ -135,7 +135,7 @@ var IndexCtrl = function($scope, $location, $rootScope, $cookies, $timeout) {
 			//var decoded = window.atob(chunk);
 			//var decoded = decode64(chunk);
 			//var decoded = JSON.parse(decodeURIComponent(escape(chunk)));
-			var decoded = new Uint8Array(chunk);
+			var decoded = new Uint8Array(BISON.decode(chunk));
 			$scope.blob.push(decoded);
 				/*
 				
