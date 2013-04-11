@@ -103,7 +103,7 @@ io.of('/download')
 
         var parsedUrl = url.parse(link);
 
-        if (url.indexOf("https")>-1) {
+        if (link.indexOf("https")>-1) {
           socket.emit('error', "https not supported");
           return;
         }
