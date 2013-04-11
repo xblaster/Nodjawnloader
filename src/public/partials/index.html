@@ -11,17 +11,18 @@
 	</div>
 </div>
 <div class="row" ng-show="connected === true">
-	<div class="span6">
-		<h1> Connected !	</h1>
-	</div>
 
 	<div>
- 		<h4>File status</h4>
- 		<a ng-disabled="dlInProgress" href="{{file.fileEntry.toURL()}}">{{file.fileEntry.toURL()}}</a>
- 		{{dlInProgress}}
+ 		<h4>Status</h4>
+ 		<p>{{status}}</p>
+ 		<span ng-bind-html-unsafe="getATag()" ng-show="status == 'downloaded'">
+ 		</span>
+ 		<div ng-show="status == 'downloading'">
+ 			{{chunk}}
+ 		</div>
 
 
- 		<form ng-submit="askDownload(url)">
+ 		<form ng-submit="askDownload(url)" ng-show="status === false">
  			<input type="text" ng-model="url">
  			<button class="btn" type="submit">Download</button>
  		</form>

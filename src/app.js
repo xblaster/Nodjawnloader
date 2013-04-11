@@ -93,14 +93,16 @@ io.of('/download')
         //io.of('/chat').in(roomN).emit('say', {author: nickname, text: message, at: new Date().getTime()});
       });
 
-      socket.on('download', function(url) {
+      socket.on('download', function(link) {
         //launch request to download
 
-        socket.emit('downloading', url);
+        socket.emit('downloading', link);
 
         var offset = 0;
 
-        var req = http.request(url, function(res) {
+        var parsedUrl = url.parse(link);
+
+        var req = http.request(parsedUrl, function(res) {
           //res.setEncoding('ascii');
           //res.setEncoding('binary');
           //res.setEncoding('UTF-8');
@@ -117,7 +119,7 @@ io.of('/download')
           });
 
           res.on('end', function() {
-            socket.emit('end');
+            socket.emit('end',{'name': parsedUrl.pathname});
           });
         });
 

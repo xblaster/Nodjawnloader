@@ -41,10 +41,21 @@ var IndexCtrl = function($scope, $location, $rootScope, $cookies, $timeout) {
 	$scope.errors = [];
 
 	var fs = null;
+	$scope.chunk = 0;
+	$scope.status = false;
 
 	$scope.onInitFs = function(fsRef) {
 		fs = fsRef;
-		$scope.removeFile("toto");
+		//$scope.removeFile("tmpFile");
+
+		var dirReader = fs.root.createReader();
+		dirReader.readEntries(function(entries) {
+			for (var i = 0, entry;  entry = entries[i]; i++) {
+				entry.remove(function() {},$scope.errorHandler);
+			}
+		});
+
+
 	};
 
 	$scope.removeFile = function(name) {
@@ -59,6 +70,7 @@ var IndexCtrl = function($scope, $location, $rootScope, $cookies, $timeout) {
 			}, $scope.errorHandler)
 		});
 
+
 	}
 
 	$scope.errorHandler = function(e) {
@@ -68,8 +80,9 @@ var IndexCtrl = function($scope, $location, $rootScope, $cookies, $timeout) {
 	};
 
 	$scope.askDownload = function(url) {
+		$scope.chunk = 0;
 
-		fs.root.getFile("toto", {create: true}, function (fileEntry) {
+		fs.root.getFile("tmpFile", {create: true}, function (fileEntry) {
 			console.log("create file !");
 			$scope.file.fileEntry = fileEntry;
 			fileEntry.createWriter(function(fileWriter) {
@@ -79,7 +92,8 @@ var IndexCtrl = function($scope, $location, $rootScope, $cookies, $timeout) {
 					//console.log($scope.file);
 					
 					socket.emit("download", url);
-					$scope.dlInProgress = true;
+					//$scope.dlInProgress = true;
+					$scope.status = 'downloading'
 					$scope.$apply();
 					//launch loop for file construction;
 					$scope.constructLoop();
@@ -90,8 +104,8 @@ var IndexCtrl = function($scope, $location, $rootScope, $cookies, $timeout) {
 	}
 
 	$scope.init = function() {
-		window.webkitStorageInfo.requestQuota(PERSISTENT, 1024*1024*1000, function(grantedBytes) {
-			window.requestFileSystem(PERSISTENT, grantedBytes, $scope.onInitFs, $scope.errorHandler);
+		window.webkitStorageInfo.requestQuota(TEMPORARY, 1024*1024*1000, function(grantedBytes) {
+			window.requestFileSystem(TEMPORARY, grantedBytes, $scope.onInitFs, $scope.errorHandler);
 		}, function(e) {
 			$scope.$apply(function() {
 				$scope.error = e;
@@ -102,7 +116,12 @@ var IndexCtrl = function($scope, $location, $rootScope, $cookies, $timeout) {
 	$scope.packets = [];
 	$scope.blob = [];
 
-	$scope.fileUploaded = false;
+	$scope.getATag = function() {
+		if ($scope.file.fileEntry) {
+			return '<a href="'+$scope.file.fileEntry.toURL()+'">'+$scope.file.fileEntry.toURL()+'</a>';
+		}
+		return "";
+	}
 
 	$scope.constructLoop = function() {
 		//console.log("constructLoop");
@@ -138,12 +157,12 @@ var IndexCtrl = function($scope, $location, $rootScope, $cookies, $timeout) {
 				
 			}
 
-			if ($scope.dlInProgress === false) {
+			if ($scope.status === 'downloaded') {
 				$scope.file.fileEntry.createWriter(function(fileWriter) {
 			//fileWriter.write($scope.blob.getBlob('text/plain'));
-			console.log("write eveything");
-			console.log($scope.blob);
-			fileWriter.write(new Blob($scope.blob,{type: "application/octet-binary"}));
+				console.log("write eveything");
+				console.log($scope.blob);
+				fileWriter.write(new Blob($scope.blob,{type: "application/octet-binary"}));
 			//fileWriter.write(new Blob([$scope.blob],{type: "text/plain"}));
 		});	
 
@@ -162,13 +181,16 @@ var IndexCtrl = function($scope, $location, $rootScope, $cookies, $timeout) {
 		$scope.$apply(function() {
 
 			$scope.connected = true;
+			$scope.chunk = $scope.chunk+1;
 
 		});
 	});
 
 	socket.on('end', function(chunk, eventType) {
-		$scope.dlInProgress = false;
+		$scope.status = 'downloaded'
 		
+
+
 		$scope.$apply();
 	});
 
