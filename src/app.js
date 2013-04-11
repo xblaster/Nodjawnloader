@@ -12,6 +12,7 @@ var express = require('express')
   , path = require('path');
 
 var app = express();
+var url = require('url');
 var _ = require('lodash');
 
 var BISON = require('./public/js/lib/bison');
