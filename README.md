@@ -10,6 +10,10 @@ your request and send file blocks using websocket or long polling using socket.i
 When all blocks are downloaded, the file 
 is exposed to you using HTML5 File API.
 
+# Requirement
+
+WARNING :  Only tested with Chrome 26
+
 # Launch your own server
 
 Checkout the project and type in a command line
