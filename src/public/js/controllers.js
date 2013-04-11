@@ -3,6 +3,59 @@
 window.requestFileSystem = window.requestFileSystem ||  window.webkitRequestFileSystem;
 window.BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder;
 
+// LZW-compress a string
+function lzw_encode(s) {
+    var dict = {};
+    var data = (s + "").split("");
+    var out = [];
+    var currChar;
+    var phrase = data[0];
+    var code = 256;
+    for (var i=1; i<data.length; i++) {
+        currChar=data[i];
+        if (dict[phrase + currChar] != null) {
+            phrase += currChar;
+        }
+        else {
+            out.push(phrase.length > 1 ? dict[phrase] : phrase.charCodeAt(0));
+            dict[phrase + currChar] = code;
+            code++;
+            phrase=currChar;
+        }
+    }
+    out.push(phrase.length > 1 ? dict[phrase] : phrase.charCodeAt(0));
+    for (var i=0; i<out.length; i++) {
+        out[i] = String.fromCharCode(out[i]);
+    }
+    return out.join("");
+}
+ 
+// Decompress an LZW-encoded string
+function lzw_decode(s) {
+    var dict = {};
+    var data = (s + "").split("");
+    var currChar = data[0];
+    var oldPhrase = currChar;
+    var out = [currChar];
+    var code = 256;
+    var phrase;
+    for (var i=1; i<data.length; i++) {
+        var currCode = data[i].charCodeAt(0);
+        if (currCode < 256) {
+            phrase = data[i];
+        }
+        else {
+           phrase = dict[currCode] ? dict[currCode] : (oldPhrase + currChar);
+        }
+        out.push(phrase);
+        currChar = phrase.charAt(0);
+        dict[code] = oldPhrase + currChar;
+        code++;
+        oldPhrase = phrase;
+    }
+    return out.join("");
+}
+
 function decodeUint8(data) {
 var reader = new FileReader();
 
@@ -135,7 +188,7 @@ var IndexCtrl = function($scope, $location, $rootScope, $cookies, $timeout) {
 			//var decoded = window.atob(chunk);
 			//var decoded = decode64(chunk);
 			//var decoded = JSON.parse(decodeURIComponent(escape(chunk)));
-			var decoded = new Uint8Array(BISON.decode(chunk));
+			var decoded = new Uint8Array(BISON.decode(lzw_decode(chunk)));
 			$scope.blob.push(decoded);
 				/*
 				
@@ -181,7 +234,6 @@ var IndexCtrl = function($scope, $location, $rootScope, $cookies, $timeout) {
 		$scope.$apply(function() {
 
 			$scope.connected = true;
-			$scope.chunk = $scope.chunk+1;
 
 		});
 	});
@@ -196,6 +248,7 @@ var IndexCtrl = function($scope, $location, $rootScope, $cookies, $timeout) {
 
 	socket.on('data', function(obj, eventType) {
 		$scope.packets.push(obj);
+		$scope.chunk = $scope.chunk+1;
 	});
 
 	socket.on('error', function(err, eventType) {

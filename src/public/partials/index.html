@@ -19,6 +19,9 @@
  		</span>
  		<div ng-show="status == 'downloading'">
  			{{chunk}}
+ 			<div class="progress progress-striped">
+  				<div class="bar" style="width: {{chunk}}px;"></div>
+			</div>
  		</div>
 
 
