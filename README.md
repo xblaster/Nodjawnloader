@@ -1,9 +1,9 @@
-JsDownloader
+NodjaDownloader
 ============
 
 A download app using node.js and socket.io and expose file using HTML5 FileAPI 
 
-# Why JsDownloader ? 
+# Why NodjaDownloader ? 
 
 Some firewall block zip, war, jar or nearly eveything but GET http requests. JsDownloader server will download 
 your request and send file blocks with websocket or long polling using socket.io. 
