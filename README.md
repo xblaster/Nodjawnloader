@@ -1,4 +1,4 @@
-Nodjawnloader
+Nodjawnloader : Download like a ninja !
 ============
 
 Nodjawnloader = Node.js + Ninja + Downlader
