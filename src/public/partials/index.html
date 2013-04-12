@@ -1,8 +1,7 @@
 <div class="row hero-unit"  >
 	<div class="span8">
-		<h1>JsDownloader</h1>
-		<hr/>
-		
+		<h1><i class="icon-star icon-spin"></i> Nodjawnloader</h1>
+		<p>Download like a ninja !</p>
 	</div>
 </div>
 <div class="row" ng-show="connected === false">
@@ -12,26 +11,31 @@
 </div>
 <div class="row" ng-show="connected === true">
 
-	<div>
- 		<h4>Status</h4>
- 		<p>{{status}}</p>
+	<div class="span12">
+ 		
+ 		<div ng-show="status !== false">
+ 			<h4>Progress</h4>
+ 			<p>{{status}}</p>
+ 		</div>
  		<span ng-bind-html-unsafe="getATag()" ng-show="status == 'downloaded'">
  		</span>
  		<div ng-show="status == 'downloading'">
- 			{{chunk}}
  			<div class="progress progress-striped">
   				<div class="bar" style="width: {{chunk}}px;"></div>
 			</div>
- 		</div>
+		</div>
 
 
- 		<form ng-submit="askDownload(url)" ng-show="status === false">
- 			<input type="text" ng-model="url">
- 			<button class="btn" type="submit">Download</button>
- 		</form>
+
+		<form ng-submit="askDownload(url)" ng-show="status === false" class="form-search">
+			<div class="input-append">
+				<input type="text" class="span10 search-query" ng-model="url">
+				<button type="submit" class="btn"><i class="icon-download"></i> Download</button>
+			</div>
+		</form>
 	</div>
 
 	<div ng-repeat="error in errors">
- 		{{error}}
+		{{error}}
 	</div>
 </div>

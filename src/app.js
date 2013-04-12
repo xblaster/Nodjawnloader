@@ -76,6 +76,7 @@ var express = require('express')
   //, user = require('./routes/user')
   //, testCtrl = require('./routes/test')
   , http = require('http')
+  , https = require('https')
 
   , path = require('path');
 
@@ -172,11 +173,16 @@ io.of('/download')
         var parsedUrl = url.parse(link);
 
         if (link.indexOf("https")>-1) {
-          socket.emit('error', "https not supported");
-          return;
+          //socket.emit('error', "https not supported");
+          //return;
+          var dlder = https;
+        } else {
+          var dlder = http;
         }
 
-        var req = http.request(parsedUrl, function(res) {
+
+
+        var req = dlder.request(parsedUrl, function(res) {
           //res.setEncoding('ascii');
           //res.setEncoding('binary');
           //res.setEncoding('UTF-8');
