@@ -1,4 +1,4 @@
-Nodjawnloader
+Nodjawnloader : Download like a ninja !
 ============
 
 Nodjawnloader = Node.js + Ninja + Downlader
@@ -6,11 +6,11 @@ Nodjawnloader = Node.js + Ninja + Downlader
 # What is Nodjawnloader ? 
 
 Some firewall block zip, war, jar or nearly eveything but GET http requests. Nodjawnloader server will download 
-your request and send file blocks with websocket or long polling using socket.io. 
+your request and send file blocks to your client browser with websocket or long polling using socket.io. 
 When all blocks are downloaded by you browser, the file 
 is exposed to you using HTML5 File API.
 
-Please respect security recommandation ! Do not use 
+Please respect security recommandation of you provider or company !
 
 # Requirement
 
