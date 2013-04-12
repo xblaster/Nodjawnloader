@@ -3,9 +3,7 @@ Nodjawnloader
 
 Nodjawnloader = Node.js + Ninja + Downlader
 
-A download app using node.js and socket.io and expose file using HTML5 FileAPI 
-
-# Why Nodjawnloader ? 
+# What is Nodjawnloader ? 
 
 Some firewall block zip, war, jar or nearly eveything but GET http requests. Nodjawnloader server will download 
 your request and send file blocks with websocket or long polling using socket.io. 
