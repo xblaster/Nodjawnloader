@@ -1,14 +1,18 @@
-NodjaDownloader
+Nodjawnloader
 ============
+
+Nodjawnloader = Node.js + Ninja + Downlader
 
 A download app using node.js and socket.io and expose file using HTML5 FileAPI 
 
-# Why NodjaDownloader ? 
+# Why Nodjawnloader ? 
 
-Some firewall block zip, war, jar or nearly eveything but GET http requests. JsDownloader server will download 
+Some firewall block zip, war, jar or nearly eveything but GET http requests. Nodjawnloader server will download 
 your request and send file blocks with websocket or long polling using socket.io. 
 When all blocks are downloaded by you browser, the file 
 is exposed to you using HTML5 File API.
+
+Please respect security recommandation ! Do not use 
 
 # Requirement
 
