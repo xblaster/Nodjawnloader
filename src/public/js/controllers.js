@@ -209,14 +209,34 @@ var IndexCtrl = function($scope, $location, $rootScope, $cookies, $timeout) {
 			$scope.receivedBytes = $scope.receivedBytes+decoded.length;
 		}
 
-		console.log($scope.receivedBytes+"/"+$scope.totalBytes);
-
 		if ($scope.receivedBytes == $scope.totalBytes) {
 				$scope.file.fileEntry.createWriter(function(fileWriter) {
 			//fileWriter.write($scope.blob.getBlob('text/plain'));
 				console.log("write eveything");
 				console.log($scope.blob);
 				fileWriter.write(new Blob($scope.blob,{type: "application/octet-binary"}));
+
+				console.log('end');
+				$scope.status = 'downloaded';
+			
+				//rename file
+				var splited = $scope.finalName.split("/");
+				var fileName = splited[splited.length-1];
+
+				var fileExtension = fileName.split(".")[1];
+				if (fileExtension== "exe") {
+					fileName = fileName+".forJsSecurity"
+				}
+
+				rename(fs.root, 'tmpFile', fileName);
+
+				//change file link
+				fs.root.getFile(fileName, {create: true}, function (fileEntry) {
+					console.log("change to filename "+fileName);
+					$scope.file.fileEntry = fileEntry;
+					$scope.$apply();
+				});
+
 			//fileWriter.write(new Blob([$scope.blob],{type: "text/plain"}));
 		});	
 
@@ -243,33 +263,10 @@ var IndexCtrl = function($scope, $location, $rootScope, $cookies, $timeout) {
 		$scope.totalBytes = obj;
 	});
 
-	socket.on('end', function(obj, eventType) {
-		console.log('end');
-		$scope.status = 'downloaded';
-		
-		var splited = obj.name.split("/");
-		var fileName = splited[splited.length-1];
-
-		var fileExtension = fileName.split(".")[1];
-		if (fileExtension== "exe") {
-			fileName = fileName+".forJsSecurity"
-		}
-
-		rename(fs.root, 'tmpFile', fileName);
-
-		//change file link
-		fs.root.getFile(fileName, {create: true}, function (fileEntry) {
-			console.log("change to filename "+fileName);
-			$scope.file.fileEntry = fileEntry;
-			$scope.$apply();
-		});
-
-
-		
-
-
-		
+	socket.on('name', function(obj, eventType) {
+		$scope.finalName = obj;
 	});
+
 
 	socket.on('data', function(obj, eventType) {
 		$scope.packets.push(obj);

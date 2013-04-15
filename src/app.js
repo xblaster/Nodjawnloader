@@ -190,6 +190,8 @@ io.of('/download')
           console.log(res.headers);
 
           socket.emit('size', res.headers['content-length']);
+          socket.emit('name', parsedUrl.pathname);
+          
 
           res.on('data', function(chunk) {
             //console.log(chunk);
