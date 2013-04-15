@@ -186,6 +186,11 @@ io.of('/download')
           //res.setEncoding('ascii');
           //res.setEncoding('binary');
           //res.setEncoding('UTF-8');
+
+          console.log(res.headers);
+
+          socket.emit('size', res.headers['content-length']);
+
           res.on('data', function(chunk) {
             //console.log(chunk);
 

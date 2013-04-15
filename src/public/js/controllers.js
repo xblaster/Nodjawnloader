@@ -112,6 +112,9 @@ var IndexCtrl = function($scope, $location, $rootScope, $cookies, $timeout) {
 	$scope.chunk = 0;
 	$scope.status = false;
 
+	$scope.receivedBytes = 0;
+	$scope.totalBytes = 100000000;
+
 	$scope.onInitFs = function(fsRef) {
 		fs = fsRef;
 		//$scope.removeFile("tmpFile");
@@ -200,32 +203,15 @@ var IndexCtrl = function($scope, $location, $rootScope, $cookies, $timeout) {
 			var obj = $scope.packets[0];
 			$scope.packets.splice(0,1);
 			var chunk = obj.data;
-			//var decoded = window.atob(chunk);
-			//var decoded = decode64(chunk);
-			//var decoded = JSON.parse(decodeURIComponent(escape(chunk)));
 			var decoded = new Uint8Array(base64decode(BISON.decode(chunk)));
 			$scope.blob.push(decoded);
-				/*
-				
 
-				console.log($scope.packets);
+			$scope.receivedBytes = $scope.receivedBytes+decoded.length;
+		}
 
-				
-				var offset = obj.offset;
-				//console.log(window.atob(chunk));
-				
+		console.log($scope.receivedBytes+"/"+$scope.totalBytes);
 
-					
-				console.log("warning: "+fileWriter.length+" / "+offset);
-				console.log(decoded.length);
-				fileWriter.seek(offset);
-
-				fileWriter.write(new Blob([decoded]));
-				*/
-				
-			}
-
-			if ($scope.status === 'downloaded') {
+		if ($scope.receivedBytes == $scope.totalBytes) {
 				$scope.file.fileEntry.createWriter(function(fileWriter) {
 			//fileWriter.write($scope.blob.getBlob('text/plain'));
 				console.log("write eveything");
@@ -251,6 +237,10 @@ var IndexCtrl = function($scope, $location, $rootScope, $cookies, $timeout) {
 			$scope.connected = true;
 
 		});
+	});
+
+	socket.on('size', function(obj, eventType) {
+		$scope.totalBytes = obj;
 	});
 
 	socket.on('end', function(obj, eventType) {

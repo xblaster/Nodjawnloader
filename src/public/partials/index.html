@@ -21,7 +21,7 @@
  		</span>
  		<div ng-show="status == 'downloading'">
  			<div class="progress progress-striped">
-  				<div class="bar" style="width: {{chunk}}px;"></div>
+  				<div class="bar" style="width: {{receivedBytes*100/totalBytes}}%;"></div>
 			</div>
 		</div>
 
