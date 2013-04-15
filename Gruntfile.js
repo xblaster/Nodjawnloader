@@ -83,6 +83,6 @@ copy: {
    grunt.loadNpmTasks('grunt-contrib-jshint');
 
   // Default task(s).
-  grunt.registerTask('default', ['clean','less','copy','uglify'/*,'jshint'*/]);
+  grunt.registerTask('default', ['clean','copy','uglify'/*,'jshint'*/]);
 
 };
