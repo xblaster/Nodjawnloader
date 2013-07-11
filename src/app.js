@@ -88,7 +88,7 @@ var BISON = require('./public/js/lib/bison');
 
 
 app.configure(function(){
-  app.set('port', process.env.PORT || 3001);
+  app.set('port', process.env.PORT || 3033);
   app.set('views', __dirname + '/views');
   app.set('view engine', 'ejs');
   app.use(express.favicon());
@@ -123,7 +123,10 @@ io.enable('browser client etag');
 io.enable('browser client gzip');
 io.set('log level',1);
 io.set('flash policy port',-1);
+io.set('close timeout', 6000);
 
+
+//io.set('resource', '');
 
 app.configure('development', function(){
   app.use(express.errorHandler());
@@ -154,6 +157,15 @@ io.of('/download')
   .on('connection', function(socket) {
 
       socket.emit('connected');
+
+
+      socket.on('error', function(e) {
+          socket.emit('error', e);
+	  console.log("socket error");
+          console.log(e);
+      })
+
+
 
       socket.on('join', function(param) {
 
@@ -192,10 +204,10 @@ io.of('/download')
           socket.emit('size', res.headers['content-length']);
           socket.emit('name', parsedUrl.pathname);
           
-
+	  
           res.on('data', function(chunk) {
             //console.log(chunk);
-
+	    //console.log(chunk.length);
             socket.emit('data', {
               'offset': offset, 
               //'data': chunk.toString('base64')
@@ -204,6 +216,8 @@ io.of('/download')
             });
             offset+= chunk.length;
           });
+
+
 
           res.on('end', function() {
             socket.emit('end',{'name': parsedUrl.pathname});
