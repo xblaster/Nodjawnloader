@@ -201,11 +201,30 @@ var IndexCtrl = function($scope, $location, $rootScope, $cookies, $timeout) {
 
 	
 	$scope.writeBlob = function (blob) {
-		$scope.file.fileEntry.createWriter(function(fileWriter) {
+		/*$scope.file.fileEntry.createWriter(function(fileWriter) {
 				console.log("writeFile "+fileWriter.length);
 				fileWriter.seek(fileWriter.length);
 				fileWriter.write(new Blob(blob,{type: "application/octet-binary"}));
-		});
+		});*/
+		
+		var createBool = false;
+		if ($scope.writtenBytes == 0) {
+			createBool = true;
+			$scope.writtenBytes = -1;
+		}
+		
+		fs.root.getFile("tmpFile", {create: createBool}, function (fileEntry) {
+			console.log("create file !");
+			$scope.file.fileEntry = fileEntry;
+			fileEntry.createWriter(function(fileWriter) {
+
+				$scope.file.fileWriter = fileWriter;
+				console.log("writeFile "+fileWriter.length);
+				fileWriter.seek(fileWriter.length);
+				fileWriter.write(new Blob(blob,{type: "application/octet-binary"}));
+				
+				}, $scope.errorHandler);
+		}, $scope.errorHandler);
 	}
 	
 	$scope.constructLoop = function() {
