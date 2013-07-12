@@ -1,4 +1,4 @@
-﻿'use strict';
+'use strict';
 
 window.requestFileSystem = window.requestFileSystem ||  window.webkitRequestFileSystem;
 window.BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder;
@@ -114,6 +114,7 @@ var IndexCtrl = function($scope, $location, $rootScope, $cookies, $timeout) {
 
 	$scope.receivedBytes = 0;
 	$scope.totalBytes = 100000000;
+	$scope.writtenBytes = 0;
 
 	$scope.onInitFs = function(fsRef) {
 		fs = fsRef;
@@ -152,8 +153,12 @@ var IndexCtrl = function($scope, $location, $rootScope, $cookies, $timeout) {
 
 	$scope.askDownload = function(url) {
 		$scope.chunk = 0;
-
+		
+		//init tmpfile
 		fs.root.getFile("tmpFile", {create: true}, function (fileEntry) {
+		});
+		
+		fs.root.getFile("tmpFile", {create: false}, function (fileEntry) {
 			console.log("create file !");
 			$scope.file.fileEntry = fileEntry;
 			fileEntry.createWriter(function(fileWriter) {
@@ -194,6 +199,15 @@ var IndexCtrl = function($scope, $location, $rootScope, $cookies, $timeout) {
 		return "";
 	}
 
+	
+	$scope.writeBlob = function (blob) {
+		$scope.file.fileEntry.createWriter(function(fileWriter) {
+				console.log("writeFile "+fileWriter.length);
+				fileWriter.seek(fileWriter.length);
+				fileWriter.write(new Blob(blob,{type: "application/octet-binary"}));
+		});
+	}
+	
 	$scope.constructLoop = function() {
 		//console.log("constructLoop");
 		//console.log($scope.packets);
@@ -207,14 +221,23 @@ var IndexCtrl = function($scope, $location, $rootScope, $cookies, $timeout) {
 			$scope.blob.push(decoded);
 
 			$scope.receivedBytes = $scope.receivedBytes+decoded.length;
+			
+			
 		}
 
+		var tmpBlock = $scope.blob;
+		$scope.blob = []; //reinit for next loop
+	
+		if (tmpBlock.lengh > 0) {
+			$scope.writeBlob(tmpBlock);
+		}
+	
+
 		if ($scope.receivedBytes == $scope.totalBytes) {
+		
+		
 				$scope.file.fileEntry.createWriter(function(fileWriter) {
-			//fileWriter.write($scope.blob.getBlob('text/plain'));
-				console.log("write eveything");
-				//console.log($scope.blob);
-				fileWriter.write(new Blob($scope.blob,{type: "application/octet-binary"}));
+				
 
 				console.log('end');
 				$scope.status = 'downloaded';
