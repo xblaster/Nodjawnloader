@@ -124,6 +124,7 @@ io.set('log level',1);
 io.set('flash policy port',-1);
 io.set('close timeout', 6000);
 io.set('transports', ['jsonp-polling', ]);
+io.set('match origin protocol', true);
 
 
 //io.set('resource', '');
