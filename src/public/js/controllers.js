@@ -246,8 +246,10 @@ var IndexCtrl = function($scope, $location, $rootScope, $cookies, $timeout) {
 
 				$scope.file.fileWriter = fileWriter;
 				console.log("writeFile "+fileWriter.length);
-				fileWriter.seek(fileWriter.length);
+				fileWriter.seek($scope.writtenBytes);
 				fileWriter.write(new Blob(blob,{type: "application/octet-binary"}));
+				
+				$scope.writtenBytes = $scope.receivedBytes;
 				
 				if ($scope.receivedBytes == $scope.totalBytes) {
 					$scope.onDlFinish();	
@@ -296,7 +298,7 @@ var IndexCtrl = function($scope, $location, $rootScope, $cookies, $timeout) {
 			return;
 		}
 
-		$timeout($scope.constructLoop, 50);
+		$timeout($scope.constructLoop, 500);
 
 		//$timeout.flush();
 		
