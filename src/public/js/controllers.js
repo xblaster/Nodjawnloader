@@ -247,7 +247,7 @@ var IndexCtrl = function($scope, $location, $rootScope, $cookies, $timeout) {
 		var tmpBlock = $scope.blob;
 		$scope.blob = []; //reinit for next loop
 	
-		if (tmpBlock.lengh > 0) {
+		if (tmpBlock.length > 0) {
 			$scope.writeBlob(tmpBlock);
 		}
 	
@@ -285,7 +285,7 @@ var IndexCtrl = function($scope, $location, $rootScope, $cookies, $timeout) {
 				return;
 			}
 
-			$timeout($scope.constructLoop, 100);
+			$timeout($scope.constructLoop, 500);
 
 		//$timeout.flush();
 		
