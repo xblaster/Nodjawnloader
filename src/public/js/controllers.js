@@ -296,7 +296,7 @@ var IndexCtrl = function($scope, $location, $rootScope, $cookies, $timeout) {
 			return;
 		}
 
-		$timeout($scope.constructLoop, 500);
+		$timeout($scope.constructLoop, 50);
 
 		//$timeout.flush();
 		
