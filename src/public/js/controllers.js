@@ -305,8 +305,8 @@ var IndexCtrl = function($scope, $location, $rootScope, $cookies, $timeout) {
 	};
 
 
-	var socket = io.connect( "http://"+window.location.host+'/download'
-			,  {'resource': '/dl/socket.io'});
+	var socket = io.connect( "http://"+window.location.host+'/download');
+			//,  {'resource': '/dl/socket.io'});
 	socket.on('connected', function(event, eventType) {
 		$scope.$apply(function() {
 
