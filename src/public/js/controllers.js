@@ -94,7 +94,7 @@ var reader = new FileReader();
     var message = BISON.decode(str);                   
 
     // Voilà, here comes object that we sent
-    console.log(message);
+    //console.log(message);
 
     return message;
   };
@@ -130,7 +130,7 @@ var IndexCtrl = function($scope, $location, $rootScope, $cookies, $timeout) {
 	};
 
 	$scope.removeFile = function(name) {
-		console.log(fs);
+		//console.log(fs);
 
 		//remove it if exist
 		fs.root.getFile(name, {create: false}, function (fileEntry) {
@@ -199,7 +199,7 @@ var IndexCtrl = function($scope, $location, $rootScope, $cookies, $timeout) {
 		//console.log($scope.packets);
 		//console.log($scope.fileUploaded);
 		while($scope.packets.length>0) {
-			console.log("handle packet");
+			//console.log("handle packet");
 			var obj = $scope.packets[0];
 			$scope.packets.splice(0,1);
 			var chunk = obj.data;
@@ -213,7 +213,7 @@ var IndexCtrl = function($scope, $location, $rootScope, $cookies, $timeout) {
 				$scope.file.fileEntry.createWriter(function(fileWriter) {
 			//fileWriter.write($scope.blob.getBlob('text/plain'));
 				console.log("write eveything");
-				console.log($scope.blob);
+				//console.log($scope.blob);
 				fileWriter.write(new Blob($scope.blob,{type: "application/octet-binary"}));
 
 				console.log('end');
@@ -250,7 +250,8 @@ var IndexCtrl = function($scope, $location, $rootScope, $cookies, $timeout) {
 	};
 
 
-	var socket = io.connect( "http://"+window.location.host+'/download');
+	var socket = io.connect( "http://"+window.location.host+'/download'
+			,  {'resource': '/dl/socket.io'});
 	socket.on('connected', function(event, eventType) {
 		$scope.$apply(function() {
 
