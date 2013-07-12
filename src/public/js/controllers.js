@@ -158,7 +158,7 @@ var IndexCtrl = function($scope, $location, $rootScope, $cookies, $timeout) {
 		fs.root.getFile("tmpFile", {create: true}, function (fileEntry) {
 		});
 		
-		fs.root.getFile("tmpFile", {create: false}, function (fileEntry) {
+		fs.root.getFile("tmpFile", {create: true}, function (fileEntry) {
 			console.log("create file !");
 			$scope.file.fileEntry = fileEntry;
 			fileEntry.createWriter(function(fileWriter) {
