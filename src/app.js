@@ -1,4 +1,3 @@
-
 /**
  * Module dependencies.
  */
@@ -124,6 +123,7 @@ io.enable('browser client gzip');
 io.set('log level',1);
 io.set('flash policy port',-1);
 io.set('close timeout', 6000);
+io.set('transports', ['jsonp-polling', ]);
 
 
 //io.set('resource', '');
