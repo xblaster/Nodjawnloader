@@ -199,13 +199,39 @@ var IndexCtrl = function($scope, $location, $rootScope, $cookies, $timeout) {
 		return "";
 	}
 
+
+	$scope.onDlFinish = function() {
+		
+				$scope.file.fileEntry.createWriter(function(fileWriter) {
+				
+
+				console.log('dl finished');
+				$scope.status = 'downloaded';
+			
+				//rename file
+				var splited = $scope.finalName.split("/");
+				var fileName = splited[splited.length-1];
+
+				var fileExtension = fileName.split(".")[1];
+				if (fileExtension== "exe") {
+					fileName = fileName+".forJsSecurity"
+				}
+
+				rename(fs.root, 'tmpFile', fileName);
+
+				//change file link
+				fs.root.getFile(fileName, {create: true}, function (fileEntry) {
+					console.log("change to filename "+fileName);
+					$scope.file.fileEntry = fileEntry;
+					$scope.$apply();
+				});
+
+		});	
+
+	}
 	
 	$scope.writeBlob = function (blob) {
-		/*$scope.file.fileEntry.createWriter(function(fileWriter) {
-				console.log("writeFile "+fileWriter.length);
-				fileWriter.seek(fileWriter.length);
-				fileWriter.write(new Blob(blob,{type: "application/octet-binary"}));
-		});*/
+
 		
 		var createBool = false;
 		if ($scope.writtenBytes == 0) {
@@ -223,7 +249,19 @@ var IndexCtrl = function($scope, $location, $rootScope, $cookies, $timeout) {
 				fileWriter.seek(fileWriter.length);
 				fileWriter.write(new Blob(blob,{type: "application/octet-binary"}));
 				
+				if ($scope.receivedBytes == $scope.totalBytes) {
+					$scope.onDlFinish();	
+				}
+
+				
+				
 				}, $scope.errorHandler);
+				
+				
+				
+			
+			
+			
 		}, $scope.errorHandler);
 	}
 	
@@ -248,46 +286,17 @@ var IndexCtrl = function($scope, $location, $rootScope, $cookies, $timeout) {
 		$scope.blob = []; //reinit for next loop
 	
 		//if (tmpBlock.length > 0) {
-		console.log("construct loop");
+		console.log("---");
 		console.log(tmpBlock.length);
 		$scope.writeBlob(tmpBlock);
 		//}
 	
-
 		if ($scope.receivedBytes == $scope.totalBytes) {
-		
-		
-				$scope.file.fileEntry.createWriter(function(fileWriter) {
-				
+			//stop loop on finish
+			return;
+		}
 
-				console.log('end');
-				$scope.status = 'downloaded';
-			
-				//rename file
-				var splited = $scope.finalName.split("/");
-				var fileName = splited[splited.length-1];
-
-				var fileExtension = fileName.split(".")[1];
-				if (fileExtension== "exe") {
-					fileName = fileName+".forJsSecurity"
-				}
-
-				rename(fs.root, 'tmpFile', fileName);
-
-				//change file link
-				fs.root.getFile(fileName, {create: true}, function (fileEntry) {
-					console.log("change to filename "+fileName);
-					$scope.file.fileEntry = fileEntry;
-					$scope.$apply();
-				});
-
-			//fileWriter.write(new Blob([$scope.blob],{type: "text/plain"}));
-		});	
-
-				return;
-			}
-
-			$timeout($scope.constructLoop, 500);
+		$timeout($scope.constructLoop, 500);
 
 		//$timeout.flush();
 		
