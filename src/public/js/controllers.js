@@ -247,9 +247,11 @@ var IndexCtrl = function($scope, $location, $rootScope, $cookies, $timeout) {
 		var tmpBlock = $scope.blob;
 		$scope.blob = []; //reinit for next loop
 	
-		if (tmpBlock.length > 0) {
-			$scope.writeBlob(tmpBlock);
-		}
+		//if (tmpBlock.length > 0) {
+		console.log("construct loop");
+		console.log(tmpBlock.length);
+		$scope.writeBlob(tmpBlock);
+		//}
 	
 
 		if ($scope.receivedBytes == $scope.totalBytes) {
