@@ -8,7 +8,7 @@
   "dependencies": {
     "express": "3.1.0",
     "ejs": "*",
-    "less-middleware": "*",
+    "less-middleware": "~0.1",
     "socket.io": "~0.9",
     "express-uglify": "*",
     "lodash": "~1.1.1",
