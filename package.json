@@ -5,17 +5,18 @@
   "scripts": {
     "start": "node app",
     "snyk-protect": "snyk protect",
-    "prepublish": "npm run snyk-protect"
+    "prepublish": "npm run snyk-protect",
+    "prepare": "npm run snyk-protect"
   },
   "dependencies": {
     "express": "4.16.0",
     "ejs": "*",
     "less-middleware": "~2.0.0",
-    "socket.io": "1.0.1",
+    "socket.io": "2.0.2",
     "express-uglify": "*",
     "lodash": "~4.17.5",
     "btoa": "~1.1.0",
-    "snyk": "^1.69.10"
+    "snyk": "^1.94.0"
   },
   "devDependencies": {
     "grunt": "~0.4.1",
