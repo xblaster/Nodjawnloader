@@ -15,7 +15,7 @@
     "express-uglify": "*",
     "lodash": "~4.17.5",
     "btoa": "~1.1.0",
-    "snyk": "^1.69.10"
+    "snyk": "^1.317.0"
   },
   "devDependencies": {
     "grunt": "~0.4.1",
